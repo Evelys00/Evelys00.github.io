@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>나만의 컴싸 향 찾기!</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f7f7f7;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    h1 { text-align: center; }
+    .question { margin-bottom: 20px; }
+    .option { display: block; margin: 5px 0; }
+    #result { margin-top: 30px; padding: 15px; background: #fff3cd; border-radius: 5px; display: none; }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 나만의 컴싸 향 찾기!</h1>
+
+  <form id="scentForm">
+    <div class="question">
+      <strong>1. 지금 당신의 기분은?</strong><br>
+      <label class="option"><input type="radio" name="mood" value="슬픔" required> 슬픔</label>
+      <label class="option"><input type="radio" name="mood" value="불안"> 불안</label>
+      <label class="option"><input type="radio" name="mood" value="무기력"> 무기력</label>
+      <label class="option"><input type="radio" name="mood" value="피곤"> 피곤</label>
+      <label class="option"><input type="radio" name="mood" value="평온"> 평온</label>
+      <label class="option"><input type="radio" name="mood" value="활기참"> 활기참</label>
+    </div>
+
+    <div class="question">
+      <strong>2. 시험까지 남은 시간은?</strong><br>
+      <label class="option"><input type="radio" name="time" value="1일 이내" required> 1일 이내</label>
+      <label class="option"><input type="radio" name="time" value="3일"> 3일</label>
+      <label class="option"><input type="radio" name="time" value="일주일"> 일주일</label>
+      <label class="option"><input type="radio" name="time" value="아직 여유 있음"> 아직 여유 있음</label>
+    </div>
+
+    <div class="question">
+      <strong>3. 스트레스 수준은?</strong><br>
+      <label class="option"><input type="radio" name="stress" value="0~3" required> 0~3</label>
+      <label class="option"><input type="radio" name="stress" value="4~6"> 4~6</label>
+      <label class="option"><input type="radio" name="stress" value="7~10"> 7~10</label>
+    </div>
+
+    <div class="question">
+      <strong>4. 집중이 잘 되나요?</strong><br>
+      <label class="option"><input type="radio" name="focus" value="예" required> 예</label>
+      <label class="option"><input type="radio" name="focus" value="아니오"> 아니오</label>
+    </div>
+
+    <div class="question">
+      <strong>5. 지금 가장 필요한 건?</strong><br>
+      <label class="option"><input type="radio" name="need" value="휴식" required> 휴식</label>
+      <label class="option"><input type="radio" name="need" value="각성"> 각성</label>
+      <label class="option"><input type="radio" name="need" value="위로"> 위로</label>
+      <label class="option"><input type="radio" name="need" value="정화"> 정화</label>
+      <label class="option"><input type="radio" name="need" value="에너지"> 에너지</label>
+    </div>
+
+    <button type="submit">향기 추천 받기</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const scentDescriptions = {
+      "로즈마리": "정신을 맑게 하고 집중력을 높여주는 향입니다.",
+      "화이트머스크": "은은한 향으로 마음을 차분하게 안정시켜 줍니다.",
+      "허브": "자연의 신선함이 스트레스를 완화시켜줍니다.",
+      "청포도": "달콤하고 상큼한 위로가 필요할 때 어울립니다.",
+      "레몬": "정신을 각성시키고 집중을 도와주는 향입니다.",
+      "라벤더": "휴식을 유도하고 불안을 완화시켜줍니다.",
+      "캐모마일": "긴장을 완화하고 편안함을 줍니다.",
+      "민트": "에너지와 활력을 주는 상쾌한 향입니다.",
+      "파슬리": "마음을 가볍게 하고 기분 전환을 도와줍니다.",
+      "장미": "자신감을 북돋우고 기분을 좋게 만들어줍니다."
+    };
+
+    function getRecommendation({ mood, time, stress, focus, need }) {
+      if (need === "휴식" || mood === "피곤") return "라벤더";
+      if (need === "각성" || focus === "아니오") return "레몬";
+      if (need === "위로" || mood === "슬픔") return "화이트머스크";
+      if (need === "에너지" || mood === "무기력") return "민트";
+      if (mood === "불안") return "캐모마일";
+      if (mood === "평온") return "허브";
+      if (mood === "활기참") return "로즈마리";
+      if (stress === "7~10") return "파슬리";
+      if (time === "1일 이내") return "청포도";
+      return "장미";
+    }
+
+    document.getElementById("scentForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        mood: form.mood.value,
+        time: form.time.value,
+        stress: form.stress.value,
+        focus: form.focus.value,
+        need: form.need.value,
+      };
+      const scent = getRecommendation(data);
+      const description = scentDescriptions[scent];
+      document.getElementById("result").innerHTML = `
+        <h2>🌿 당신에게 어울리는 향은 <strong>${scent}</strong> 입니다.</h2>
+        <p>${description}</p>
+      `;
+      document.getElementById("result").style.display = "block";
+    });
+  </script>
+
+</body>
+</html>
